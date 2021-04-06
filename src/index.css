@@ -129,6 +129,7 @@ input[type='color']::-webkit-color-swatch {
 
 .input-wrapper.invalid {
   border: 2px solid var(--error);
+  margin-bottom: 0px;
 }
 
 .input-wrapper.xs {
@@ -207,6 +208,11 @@ input[type='color']::-webkit-color-swatch {
   color: var(--error);
 }
 
+.input-wrapper.invalid ~ p{
+  color: var(--error);
+  margin-top: 5px;
+}
+
 .button {
   height: 40px;
   text-align: center;
@@ -215,6 +221,10 @@ input[type='color']::-webkit-color-swatch {
   display: inline-block;
   cursor: pointer;
   border-radius: 5px;
+}
+
+.button:focus {
+  outline: none;
 }
 
 .button.primary {

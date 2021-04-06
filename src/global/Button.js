@@ -25,7 +25,7 @@ class Button extends Component {
                 disabled={this.props.disabled}
                 onClick={this.props.onClick}
             >
-                <p className='text-smaller mb-0'><b>{this.props.label}</b></p>
+                <p className='text-smaller'><b>{this.props.label}</b></p>
             </button>
         );
     }

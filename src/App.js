@@ -12,7 +12,7 @@ const App = () => {
     type: 'text',
     value: '',
     required: true,
-    errorText: '',
+    errorText: 'Por favor define un nombre de la aplicación para poder continuar',
     valid: false,
   });
   const [appColor, setAppColor] = useState({
@@ -28,7 +28,7 @@ const App = () => {
     type: 'text',
     value: '',
     required: true,
-    errorText: '',
+    errorText: 'Por favor escribe el nombre de la plaza para poder continuar',
     valid: false,
   });
   const [projectName, setProjectName] = useState({
@@ -36,7 +36,7 @@ const App = () => {
     type: 'text',
     value: '',
     required: true,
-    errorText: '',
+    errorText: 'Por favor define un nombre del proyecto para poder continuar',
     valid: false,
   });
   const [apiKey, setApiKey] = useState({
@@ -44,7 +44,7 @@ const App = () => {
     type: 'text',
     value: '',
     required: true,
-    errorText: '',
+    errorText: 'Por favor escribe tu apiKey para poder continuar',
     valid: false,
   });
   const [authDomain, setAuthDomain] = useState({
@@ -52,7 +52,7 @@ const App = () => {
     type: 'text',
     value: '',
     required: true,
-    errorText: '',
+    errorText: 'Por favor escribe tu authDomain para poder continuar',
     valid: false,
   });
   const [projectId, setProjectId] = useState({
@@ -60,7 +60,7 @@ const App = () => {
     type: 'text',
     value: '',
     required: true,
-    errorText: '',
+    errorText: 'Por favor escribe tu projectId para poder continuar',
     valid: false,
   });
   const [storageBucket, setStorageBucket] = useState({
@@ -68,7 +68,7 @@ const App = () => {
     type: 'text',
     value: '',
     required: true,
-    errorText: '',
+    errorText: 'Por favor escribe tu storageBucket para poder continuar',
     valid: false,
   });
   const [messagingSenderId, setMessagingSenderId] = useState({
@@ -76,7 +76,7 @@ const App = () => {
     type: 'text',
     value: '',
     required: true,
-    errorText: '',
+    errorText: 'Por favor escribe tu messagingSenderId para poder continuar',
     valid: false,
   });
   const [appId, setAppId] = useState({
@@ -84,7 +84,7 @@ const App = () => {
     type: 'text',
     value: '',
     required: true,
-    errorText: '',
+    errorText: 'Por favor escribe tu appId para poder continuar',
     valid: false,
   });
 
@@ -93,34 +93,64 @@ const App = () => {
     setSubmitted(true);
     if(appName.value.trim() !== '' && appName.required) {
       setAppName({...appName, valid: true});
-    }
+    } else {
+      setAppName({...appName, valid: false});
+    } 
     if(storeName.value.trim() !== '' && storeName.required) {
       setStoreName({...storeName, valid: true});
+    } else {
+      setStoreName({...storeName, valid: false});
     }
     if(projectName.value.trim() !== '' && projectName.required) {
-      setProjectName({...projectName, valid: true});
+      if(/^[a-zA-Z0-9-]*$/.test(projectName.value)) {
+        setProjectName({...projectName, valid: true});
+      } else {
+        setProjectName({...projectName, valid: false, errorText: 'El nombre del proyecto solo puede estar conformado por letras, números, y guiones'});
+      }
+    } else {
+      setProjectName({...projectName, valid: false, errorText: 'Por favor define un nombre del proyecto para poder continuar'});
     }
     if(apiKey.value.trim() !== '' && apiKey.required) {
       setApiKey({...apiKey, valid: true});
+    } else {
+      setApiKey({...apiKey, valid: false});
     }
     if(authDomain.value.trim() !== '' && authDomain.required) {
       setAuthDomain({...authDomain, valid: true});
-    }
+    } else {
+      setAuthDomain({...authDomain, valid: false});
+    } 
     if(projectId.value.trim() !== '' && projectId.required) {
-      setProjectId({...projectId, valid: true});
+      if(/^[a-zA-Z0-9-]*$/.test(projectId.value)) {
+        setProjectId({...projectId, valid: true});
+      } else {
+        setProjectId({...projectId, valid: false, errorText: 'El projectId solo puede estar conformado por letras, números, y guiones'});
+      }
+    } else {
+      setProjectId({...projectId, valid: false, errorText: 'Por favor escribe tu projectId para poder continuar'});
     }
     if(storageBucket.value.trim() !== '' && storageBucket.required) {
       setStorageBucket({...storageBucket, valid: true});
+    } else {
+      setStorageBucket({...storageBucket, valid: false});
     }
     if(messagingSenderId.value.trim() !== '' && messagingSenderId.required) {
-      setMessagingSenderId({...messagingSenderId, valid: true});
+      if(/^[0-9]*$/.test(projectId.value)) {
+        setMessagingSenderId({...messagingSenderId, valid: true});
+      } else {
+        setMessagingSenderId({...messagingSenderId, valid: false, errorText: 'El messagingSendeId solo puede estar conformado por números'});
+      }
+    } else {
+      setMessagingSenderId({...messagingSenderId, valid: false, errorText: 'Por favor escribe tu messagingSenderId para poder continuar'});
     }
     if(appId.value.trim() !== '' && appId.required) {
       setAppId({...appId, valid: true});
+    } else {
+      setAppId({...appId, valid: false});
     }
-    console.log(icon.current.files[0]);
-    console.log(projectLocation.current.files[0]);
-    console.log(configFiles.current.files[0]);
+    //console.log(icon.current.files[0]);
+    //console.log(projectLocation.current.files[0]);
+    //console.log(configFiles.current.files[0]);
   }
 
   return (

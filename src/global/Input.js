@@ -54,7 +54,7 @@ class Input extends Component {
                             </div>
                         </div>
                         {this.props.submitted && !this.props.valid &&
-                            <p className='text-smallest'>* {this.props.errorText}</p>
+                            <p className='text-smallest light'>* {this.props.errorText}</p>
                         }
                     </>
                 );
