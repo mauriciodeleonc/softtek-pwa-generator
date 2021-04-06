@@ -5,16 +5,8 @@
   --background-color: #FCFCFC;
   --error: #FF3333;
   --light-error: #FFE5E6;
-  --main: #FF6961;
-  --main-shadow: rgba(255, 105, 97, 0.4);
-  --complementary: #4BC65A;
+  --main: #54CF7A;
   --secondary-button: #FFE7E5;
-  --main-green: #00E52F;
-  --light-green: #E5FFEB;
-  --main-blue: #15F4EE;
-  --light-blue: #E7FEFD;
-  --main-orange: #FF8300;
-  --light-orange: #FFF3E5;
   --border-gray: rgba(0, 24, 51, 0.1);
 }
 
@@ -92,7 +84,7 @@ input[type='color']::-webkit-color-swatch-wrapper {
 	padding: 2px;
 }
 
-input[type="color"]::-webkit-color-swatch {
+input[type='color']::-webkit-color-swatch {
 	border: none;
   border-radius: 5px;
 }
@@ -129,6 +121,14 @@ input[type="color"]::-webkit-color-swatch {
   background: var(--main-light);
   padding: 0;
   margin: 15px 0px;
+}
+
+.input-wrapper.valid {
+  border: 2px solid var(--main);
+}
+
+.input-wrapper.invalid {
+  border: 2px solid var(--error);
 }
 
 .input-wrapper.xs {
@@ -199,6 +199,14 @@ input[type="color"]::-webkit-color-swatch {
   transition: transform 0.35s, background 0.35s;
 }
 
+.input-wrapper.valid .input-placeholder {
+  color: var(--main);
+}
+
+.input-wrapper.invalid .input-placeholder {
+  color: var(--error);
+}
+
 .button {
   height: 40px;
   text-align: center;
@@ -211,7 +219,6 @@ input[type="color"]::-webkit-color-swatch {
 
 .button.primary {
   background-color: var(--main);
-  box-shadow: 0px 0px 10px 0px var(--main-shadow);
 }
 
 .button.primary p {
