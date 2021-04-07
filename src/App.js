@@ -96,11 +96,13 @@ const App = () => {
     } else {
       setAppName({...appName, valid: false});
     } 
+
     if(storeName.value.trim() !== '' && storeName.required) {
       setStoreName({...storeName, valid: true});
     } else {
       setStoreName({...storeName, valid: false});
     }
+
     if(projectName.value.trim() !== '' && projectName.required) {
       if(/^[a-zA-Z0-9-]*$/.test(projectName.value)) {
         setProjectName({...projectName, valid: true});
@@ -110,16 +112,23 @@ const App = () => {
     } else {
       setProjectName({...projectName, valid: false, errorText: 'Por favor define un nombre del proyecto para poder continuar'});
     }
+    
     if(apiKey.value.trim() !== '' && apiKey.required) {
       setApiKey({...apiKey, valid: true});
     } else {
       setApiKey({...apiKey, valid: false});
     }
+
     if(authDomain.value.trim() !== '' && authDomain.required) {
-      setAuthDomain({...authDomain, valid: true});
+      if(/^[a-zA-Z0-9-\\.]*$/.test(authDomain.value)) {
+        setAuthDomain({...authDomain, valid: true});
+      } else {
+        setAuthDomain({...authDomain, valid: false, errorText: 'El authDomain solo puede estar conformado por letras, números, guiones, y puntos'});
+      }
     } else {
-      setAuthDomain({...authDomain, valid: false});
+      setAuthDomain({...authDomain, valid: false, errorText: 'Por favor escribe tu authDomain para poder continuar'});
     } 
+
     if(projectId.value.trim() !== '' && projectId.required) {
       if(/^[a-zA-Z0-9-]*$/.test(projectId.value)) {
         setProjectId({...projectId, valid: true});
@@ -129,11 +138,17 @@ const App = () => {
     } else {
       setProjectId({...projectId, valid: false, errorText: 'Por favor escribe tu projectId para poder continuar'});
     }
+
     if(storageBucket.value.trim() !== '' && storageBucket.required) {
-      setStorageBucket({...storageBucket, valid: true});
+      if(/^[a-zA-Z0-9-\\.]*$/.test(storageBucket.value)) {
+        setStorageBucket({...storageBucket, valid: true});
+      } else {
+        setStorageBucket({...storageBucket, valid: false, errorText: 'El storageBucket solo puede estar conformado por letras, números, guiones, y puntos'});
+      }
     } else {
-      setStorageBucket({...storageBucket, valid: false});
+      setStorageBucket({...storageBucket, valid: false, errorText: 'Por favor escribe tu storageBucket para poder continuar'});
     }
+
     if(messagingSenderId.value.trim() !== '' && messagingSenderId.required) {
       if(/^[0-9]*$/.test(projectId.value)) {
         setMessagingSenderId({...messagingSenderId, valid: true});
@@ -143,6 +158,7 @@ const App = () => {
     } else {
       setMessagingSenderId({...messagingSenderId, valid: false, errorText: 'Por favor escribe tu messagingSenderId para poder continuar'});
     }
+
     if(appId.value.trim() !== '' && appId.required) {
       setAppId({...appId, valid: true});
     } else {
@@ -176,6 +192,8 @@ const App = () => {
             label='Ícono de la aplicación'
             type='file'
             ref={icon}
+            name='icon'
+            size='md'
           />
           <Input
             label={appColor.label}
@@ -214,12 +232,15 @@ const App = () => {
             label='Ubicación donde se guardará el proyecto'
             type='file'
             ref={projectLocation}
+            name='projectLocation'
+            size='lg'
           />
           <h3>Archivos de configuración</h3>
           <Input
             label='Arrastra y suelta tus archivos y folders aquí o busca tus archivos'
             type='file'
             ref={configFiles}
+            name='configFiles'
           />
         </section>
         <section>

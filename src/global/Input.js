@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Button from './Button';
 
 class Input extends Component {
     constructor(props) {
@@ -28,10 +29,22 @@ class Input extends Component {
                 );
             case 'file':
                 return(
-                    <div className={`${this.props.className && this.props.className} ${this.props.size && this.props.size} `}>
+                    <>
+                        <label for={this.props.name} className='file-label'>
+                            <div className={`input-wrapper ${this.props.className && this.props.className} ${this.props.size ? this.props.size : 'block'}`}>
+                                <p>{this.props.value}</p>
+                                <div className={`input-placeholder non-bold ${this.state.value.length > 0 && 'focused'}`}>
+                                    {this.props.label}
+                                </div>
+                            </div>
+                            <div className='button secondary'>
+                                <p className='text-smaller'>Escoger ruta</p>
+                            </div>
+                        </label>
                         <input
                             type={this.props.type}
-                            className='input'
+                            id={this.props.name}
+                            className='file-input'
                             value={this.state.value}
                             onChange={this.handleValue}
                             ref={this.props.innerRef}
@@ -39,10 +52,10 @@ class Input extends Component {
                             webkitdirectory=''
                             multiple=''
                         />
-                        <div className={`non-bold ${this.state.value.length > 0 && 'focused'}`}>
+                        {/*<div className={`non-bold ${this.state.value.length > 0 && 'focused'}`}>
                             {this.props.label}
-                        </div>
-                    </div>
+                        </div>*/}
+                    </>
                 );
             default:
                 return(
