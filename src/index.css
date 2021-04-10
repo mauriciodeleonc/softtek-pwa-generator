@@ -6,7 +6,7 @@
   --error: #FF3333;
   --light-error: #FFE5E6;
   --main: #54CF7A;
-  --secondary-button: #FFE7E5;
+  --secondary-button: #F3FCF6;
   --border-gray: rgba(0, 24, 51, 0.1);
 }
 
@@ -295,4 +295,35 @@ input[type='color']::-webkit-color-swatch {
   box-shadow: 0px 0px 10px 0px var(--border-gray);
   z-index: 1024;
   justify-content: center;
+}
+
+.dropzone {
+  width: 100%;
+  height: 150px;
+  background-color: transparent;
+  border: 2px dashed var(--main-text);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.dropzone p{
+  margin: 0;
+  padding: 0;
+}
+
+.dropzone.dragging-file{
+  background-color: var(--secondary-button);
+  border: 2px dashed var(--main);
+}
+
+.dropzone.rejecting-file{
+  background-color: var(--light-error);
+  border: 2px dashed var(--error);
+}
+
+.main-text {
+  color: var(--main);
 }

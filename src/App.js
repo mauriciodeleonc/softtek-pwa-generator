@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import Button from './global/Button';
 import Input from './global/Input';
+import Dropzone from './global/Dropzone';
 
 const App = () => {
   const icon = useRef(null);
@@ -242,6 +243,7 @@ const App = () => {
             ref={configFiles}
             name='configFiles'
           />
+          <Dropzone />
         </section>
         <section>
           <h2>
