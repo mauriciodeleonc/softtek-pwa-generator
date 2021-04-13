@@ -32,12 +32,12 @@ class Input extends Component {
                         <label for={this.props.name} className='file-label'>
                             <div className={`input-wrapper ${this.props.className && this.props.className} ${this.props.size ? this.props.size : 'block'}`}>
                                 <p>{this.props.value}</p>
-                                <div className={`input-placeholder non-bold ${this.state.value.length > 0 && 'focused'}`}>
+                                <div className={`input-placeholder non-bold ${this.props.value.length > 0 && 'focused'}`}>
                                     {this.props.label}
                                 </div>
                             </div>
                             <div className='button secondary'>
-                                <p className='text-smaller'>Escoger ruta</p>
+                                <p className='text-smaller'>{this.props.buttonLabel}</p>
                             </div>
                         </label>
                         <input
@@ -45,10 +45,11 @@ class Input extends Component {
                             id={this.props.name}
                             className='file-input'
                             value={this.state.value}
-                            onChange={this.handleValue}
+                            onChange={this.props.handleFiles}
                             ref={this.props.innerRef}
-                            directory=''
-                            webkitdirectory=''
+                            accept={this.props.accept}
+                            //directory=''
+                            //webkitdirectory=''
                             multiple=''
                         />
                         {/*<div className={`non-bold ${this.state.value.length > 0 && 'focused'}`}>

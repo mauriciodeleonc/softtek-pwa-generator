@@ -225,6 +225,18 @@ input[type='color']::-webkit-color-swatch {
   margin-top: 5px;
 }
 
+.input-wrapper p {
+  display: block; /* Fallback for non-webkit */
+  display: -webkit-box;
+  max-width: 100%;
+  padding: 0px 10px;
+  line-height: 1;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .button {
   height: 40px;
   text-align: center;
@@ -326,4 +338,12 @@ input[type='color']::-webkit-color-swatch {
 
 .main-text {
   color: var(--main);
+}
+
+.icon {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: contain;
+  border: 1px solid var(--gray-text);
+  border-radius: 5px;
 }

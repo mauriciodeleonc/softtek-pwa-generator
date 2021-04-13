@@ -4,8 +4,9 @@ import Input from './global/Input';
 import Dropzone from './global/Dropzone';
 
 const App = () => {
-  const icon = useRef(null);
-  const projectLocation = useRef(null);
+  const [iconPath, setIconPath] = useState(null);
+  const [iconImg, setIconImg] = useState(null);
+  const [projectLocation, setProjectLocation] = useState(null);
   const configFiles = useRef(null);
   const [submitted, setSubmitted] = useState(false);
   const [appName, setAppName] = useState({
@@ -190,12 +191,20 @@ const App = () => {
             valid={appName.valid}
           />
           <Input
-            label='Ícono de la aplicación'
+            label={'Ícono de la aplicación'}
+            value={iconPath ? iconPath : ''}
             type='file'
-            ref={icon}
             name='icon'
             size='md'
+            buttonLabel='Escoger archivo'
+            accept='image/*'
+            handleFiles={(e) => {
+                setIconImg(URL.createObjectURL(e.target.files[0]));
+                setIconPath(e.target.value);
+              }
+            }
           />
+          <img src={iconImg} className='icon' />
           <Input
             label={appColor.label}
             type={appColor.type}
@@ -232,17 +241,13 @@ const App = () => {
           <Input
             label='Ubicación donde se guardará el proyecto'
             type='file'
-            ref={projectLocation}
+            value={projectLocation ? projectLocation : ''}
             name='projectLocation'
             size='lg'
+            buttonLabel='Escoger ruta'
+            handleFiles={(e) => setProjectLocation(e.target.value)}
           />
           <h3>Archivos de configuración</h3>
-          <Input
-            label='Arrastra y suelta tus archivos y folders aquí o busca tus archivos'
-            type='file'
-            ref={configFiles}
-            name='configFiles'
-          />
           <Dropzone />
         </section>
         <section>
