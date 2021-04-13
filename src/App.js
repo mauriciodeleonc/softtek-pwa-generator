@@ -247,7 +247,7 @@ const App = () => {
             buttonLabel='Escoger ruta'
             handleFiles={(e) => setProjectLocation(e.target.value)}
           />
-          <h3>Archivos de configuración</h3>
+          <h3>Información de restaurantes</h3>
           <Dropzone />
         </section>
         <section>
