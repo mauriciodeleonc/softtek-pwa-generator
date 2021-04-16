@@ -40,18 +40,33 @@ class Input extends Component {
                                 <p className='text-smaller'>{this.props.buttonLabel}</p>
                             </div>
                         </label>
-                        <input
-                            type={this.props.type}
-                            id={this.props.name}
-                            className='file-input'
-                            value={this.state.value}
-                            onChange={this.props.handleFiles}
-                            ref={this.props.innerRef}
-                            accept={this.props.accept}
-                            //directory=''
-                            //webkitdirectory=''
-                            multiple=''
-                        />
+                        {this.props.directory ?
+                            <input
+                                type={this.props.type}
+                                id={this.props.name}
+                                className='file-input'
+                                value={this.state.value}
+                                onChange={this.props.handleFiles}
+                                ref={this.props.innerRef}
+                                accept={this.props.accept}
+                                directory=''
+                                webkitdirectory=''
+                                multiple=''
+                            />
+                        :
+                            <input
+                                type={this.props.type}
+                                id={this.props.name}
+                                className='file-input'
+                                value={this.state.value}
+                                onChange={this.props.handleFiles}
+                                ref={this.props.innerRef}
+                                accept={this.props.accept}
+                                //directory=''
+                                //webkitdirectory=''
+                                multiple=''
+                            />
+                        }
                         {/*<div className={`non-bold ${this.state.value.length > 0 && 'focused'}`}>
                             {this.props.label}
                         </div>*/}

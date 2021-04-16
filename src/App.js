@@ -1,11 +1,14 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Button from './global/Button';
 import Input from './global/Input';
 import Dropzone from './global/Dropzone';
 
 const App = () => {
+
   const [iconPath, setIconPath] = useState(null);
   const [iconImg, setIconImg] = useState(null);
+  const [isIconValid, setIsIconValid] = useState(false);
+  const [icon, setIcon] = useState(null);
   const [projectLocation, setProjectLocation] = useState(null);
   const configFiles = useRef(null);
   const [submitted, setSubmitted] = useState(false);
@@ -166,9 +169,42 @@ const App = () => {
     } else {
       setAppId({...appId, valid: false});
     }
-    //console.log(icon.current.files[0]);
-    //console.log(projectLocation.current.files[0]);
-    //console.log(configFiles.current.files[0]);
+  }
+
+  useEffect(() => {
+    if(isIconValid){
+      setIconImg(URL.createObjectURL(icon));
+      setIconPath(icon.path);
+    } else {
+      setIconImg(null);
+      setIconPath(null);
+    }
+  }, [isIconValid]);
+
+  const handleIconUpload = (e) => {
+    setIsIconValid(false);
+    setIcon(e.target.files[0]);
+
+    let reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = function (e) {
+      let image = new Image();
+
+      image.src = e.target.result;
+              
+      image.onload = function () {
+        let height = this.height;
+        let width = this.width;
+        if (height !== width) {
+          alert("Images must be same size");
+          setIsIconValid(false);
+          return false;
+        } else {
+          setIsIconValid(true);
+          return true;
+        }
+      }
+    }
   }
 
   return (
@@ -198,13 +234,11 @@ const App = () => {
             size='md'
             buttonLabel='Escoger archivo'
             accept='image/*'
-            handleFiles={(e) => {
-                setIconImg(URL.createObjectURL(e.target.files[0]));
-                setIconPath(e.target.value);
-              }
-            }
+            handleFiles={handleIconUpload}
           />
-          <img src={iconImg} className='icon' />
+          {iconImg &&
+            <img src={iconImg} className='icon' />
+          }
           <Input
             label={appColor.label}
             type={appColor.type}
@@ -245,7 +279,11 @@ const App = () => {
             name='projectLocation'
             size='lg'
             buttonLabel='Escoger ruta'
-            handleFiles={(e) => setProjectLocation(e.target.value)}
+            directory
+            handleFiles={(e) => {
+              console.log(e.target.files[0].path);
+              setProjectLocation(e.target.files[0].path);
+            }}
           />
           <h3>Información de restaurantes</h3>
           <Dropzone />
