@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import Button from './global/Button';
 import Input from './global/Input';
 import Dropzone from './global/Dropzone';
-
+import Utils from './utils';
 const App = () => {
 
   const [iconPath, setIconPath] = useState(null);
@@ -169,6 +169,8 @@ const App = () => {
     } else {
       setAppId({...appId, valid: false});
     }
+    //if(todo es valido)
+    Utils.aaa('asdf');
   }
 
   useEffect(() => {
