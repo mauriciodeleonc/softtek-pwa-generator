@@ -93,7 +93,7 @@ const App = () => {
     valid: false,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
     if(appName.value.trim() !== '' && appName.required) {
@@ -169,8 +169,15 @@ const App = () => {
     } else {
       setAppId({...appId, valid: false});
     }
-    //if(todo es valido)
-    Utils.aaa('asdf');
+    if(true) { //TODO if todo es valido
+      const excelData = await Utils.readExcel('C:\\Users\\berna\\Documents\\Prácticas ITC\\excel test\\formato_pwa.xlsm');
+      console.log('excel data:',excelData);
+  
+      //connect to firebase
+  
+      //upload excelData
+
+    }
   }
 
   useEffect(() => {
