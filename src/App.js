@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import Button from './global/Button';
 import Input from './global/Input';
 import Dropzone from './global/Dropzone';
-import Utils from './utils';
+const { readExcel, connectFirebase } = require('./utils');
 const App = () => {
 
   const [iconPath, setIconPath] = useState(null);
@@ -96,92 +96,152 @@ const App = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
-    if(appName.value.trim() !== '' && appName.required) {
-      setAppName({...appName, valid: true});
+    if (appName.value.trim() !== '' && appName.required) {
+      setAppName({ ...appName, valid: true });
     } else {
-      setAppName({...appName, valid: false});
-    } 
-
-    if(storeName.value.trim() !== '' && storeName.required) {
-      setStoreName({...storeName, valid: true});
-    } else {
-      setStoreName({...storeName, valid: false});
+      setAppName({ ...appName, valid: false });
     }
 
-    if(projectName.value.trim() !== '' && projectName.required) {
-      if(/^[a-zA-Z0-9-]*$/.test(projectName.value)) {
-        setProjectName({...projectName, valid: true});
+    if (storeName.value.trim() !== '' && storeName.required) {
+      setStoreName({ ...storeName, valid: true });
+    } else {
+      setStoreName({ ...storeName, valid: false });
+    }
+
+    if (projectName.value.trim() !== '' && projectName.required) {
+      if (/^[a-zA-Z0-9-]*$/.test(projectName.value)) {
+        setProjectName({ ...projectName, valid: true });
       } else {
-        setProjectName({...projectName, valid: false, errorText: 'El nombre del proyecto solo puede estar conformado por letras, números, y guiones'});
+        setProjectName({ ...projectName, valid: false, errorText: 'El nombre del proyecto solo puede estar conformado por letras, números, y guiones' });
       }
     } else {
-      setProjectName({...projectName, valid: false, errorText: 'Por favor define un nombre del proyecto para poder continuar'});
-    }
-    
-    if(apiKey.value.trim() !== '' && apiKey.required) {
-      setApiKey({...apiKey, valid: true});
-    } else {
-      setApiKey({...apiKey, valid: false});
+      setProjectName({ ...projectName, valid: false, errorText: 'Por favor define un nombre del proyecto para poder continuar' });
     }
 
-    if(authDomain.value.trim() !== '' && authDomain.required) {
-      if(/^[a-zA-Z0-9-\\.]*$/.test(authDomain.value)) {
-        setAuthDomain({...authDomain, valid: true});
+    if (apiKey.value.trim() !== '' && apiKey.required) {
+      setApiKey({ ...apiKey, valid: true });
+    } else {
+      setApiKey({ ...apiKey, valid: false });
+    }
+
+    if (authDomain.value.trim() !== '' && authDomain.required) {
+      if (/^[a-zA-Z0-9-\\.]*$/.test(authDomain.value)) {
+        setAuthDomain({ ...authDomain, valid: true });
       } else {
-        setAuthDomain({...authDomain, valid: false, errorText: 'El authDomain solo puede estar conformado por letras, números, guiones, y puntos'});
+        setAuthDomain({ ...authDomain, valid: false, errorText: 'El authDomain solo puede estar conformado por letras, números, guiones, y puntos' });
       }
     } else {
-      setAuthDomain({...authDomain, valid: false, errorText: 'Por favor escribe tu authDomain para poder continuar'});
-    } 
+      setAuthDomain({ ...authDomain, valid: false, errorText: 'Por favor escribe tu authDomain para poder continuar' });
+    }
 
-    if(projectId.value.trim() !== '' && projectId.required) {
-      if(/^[a-zA-Z0-9-]*$/.test(projectId.value)) {
-        setProjectId({...projectId, valid: true});
+    if (projectId.value.trim() !== '' && projectId.required) {
+      if (/^[a-zA-Z0-9-]*$/.test(projectId.value)) {
+        setProjectId({ ...projectId, valid: true });
       } else {
-        setProjectId({...projectId, valid: false, errorText: 'El projectId solo puede estar conformado por letras, números, y guiones'});
+        setProjectId({ ...projectId, valid: false, errorText: 'El projectId solo puede estar conformado por letras, números, y guiones' });
       }
     } else {
-      setProjectId({...projectId, valid: false, errorText: 'Por favor escribe tu projectId para poder continuar'});
+      setProjectId({ ...projectId, valid: false, errorText: 'Por favor escribe tu projectId para poder continuar' });
     }
 
-    if(storageBucket.value.trim() !== '' && storageBucket.required) {
-      if(/^[a-zA-Z0-9-\\.]*$/.test(storageBucket.value)) {
-        setStorageBucket({...storageBucket, valid: true});
+    if (storageBucket.value.trim() !== '' && storageBucket.required) {
+      if (/^[a-zA-Z0-9-\\.]*$/.test(storageBucket.value)) {
+        setStorageBucket({ ...storageBucket, valid: true });
       } else {
-        setStorageBucket({...storageBucket, valid: false, errorText: 'El storageBucket solo puede estar conformado por letras, números, guiones, y puntos'});
+        setStorageBucket({ ...storageBucket, valid: false, errorText: 'El storageBucket solo puede estar conformado por letras, números, guiones, y puntos' });
       }
     } else {
-      setStorageBucket({...storageBucket, valid: false, errorText: 'Por favor escribe tu storageBucket para poder continuar'});
+      setStorageBucket({ ...storageBucket, valid: false, errorText: 'Por favor escribe tu storageBucket para poder continuar' });
     }
 
-    if(messagingSenderId.value.trim() !== '' && messagingSenderId.required) {
-      if(/^[0-9]*$/.test(projectId.value)) {
-        setMessagingSenderId({...messagingSenderId, valid: true});
+    if (messagingSenderId.value.trim() !== '' && messagingSenderId.required) {
+      if (/^[0-9]*$/.test(projectId.value)) {
+        setMessagingSenderId({ ...messagingSenderId, valid: true });
       } else {
-        setMessagingSenderId({...messagingSenderId, valid: false, errorText: 'El messagingSendeId solo puede estar conformado por números'});
+        setMessagingSenderId({ ...messagingSenderId, valid: false, errorText: 'El messagingSendeId solo puede estar conformado por números' });
       }
     } else {
-      setMessagingSenderId({...messagingSenderId, valid: false, errorText: 'Por favor escribe tu messagingSenderId para poder continuar'});
+      setMessagingSenderId({ ...messagingSenderId, valid: false, errorText: 'Por favor escribe tu messagingSenderId para poder continuar' });
     }
 
-    if(appId.value.trim() !== '' && appId.required) {
-      setAppId({...appId, valid: true});
+    if (appId.value.trim() !== '' && appId.required) {
+      setAppId({ ...appId, valid: true });
     } else {
-      setAppId({...appId, valid: false});
+      setAppId({ ...appId, valid: false });
     }
-    if(true) { //TODO if todo es valido
-      const excelData = await Utils.readExcel('C:\\Users\\berna\\Documents\\Prácticas ITC\\excel test\\formato_pwa.xlsm');
-      console.log('excel data:',excelData);
-  
+    if (true) { //TODO if todo es valido
+      const excelData = await readExcel('C:\\Users\\berna\\Documents\\Prácticas ITC\\excel test\\formato_pwa.xlsm');
+      console.log('excel data:', excelData);
+      //TODO check if excel data is complete. return if not
+
+
       //connect to firebase
-  
+      // const db = await connectFirebase({
+      //   apiKey: apiKey.value,
+      //   authDomain: authDomain.value,
+      //   projectId: projectId.value,
+      //   storageBucket: storageBucket.value,
+      //   messagingSenderId: messagingSenderId.value,
+      //   appId: appId.value
+      // })
+      const db = await connectFirebase({
+        apiKey: "AIzaSyDBeKFfQLOXcTwzsoMDrepvk3BHvqUNFvY",
+        authDomain: "test-bb03e.firebaseapp.com",
+        projectId: "test-bb03e",
+        storageBucket: "test-bb03e.appspot.com",
+        messagingSenderId: "1035533266251",
+        appId: "1:1035533266251:web:e2e8fcea80feec49228cce"
+      })
       //upload excelData
+      
+      //TODO add faq
 
+      //add locations collection
+      const locations = await db.collection('locations').add({
+        isVisible: true,
+        name: storeName.value
+      })
+      //update locations id field
+      const locationsRef = db.collection('locations').doc(locations.id);
+      await locationsRef.set({ id: locations.id }, { merge: true });
+
+      for(const excelRestaurant of excelData) {
+        //TODO upload restaurant logo excelRestaurant[8][1]
+        const paymentTypes = [];
+        if(excelRestaurant[6][1].toLowerCase() == "sí" || excelRestaurant[6][1].toLowerCase() == "si") paymentTypes.push('Efectivo')
+        if(excelRestaurant[7][1].toLowerCase() == "sí" || excelRestaurant[7][1].toLowerCase() == "si") paymentTypes.push('Tarjeta')
+        //create restaurants subcollection in locations document
+        const restaurant = await locationsRef.collection("restaurants").add({
+          hours: `De ${excelRestaurant[3][1]} a ${excelRestaurant[4][1]}`,
+          imageURL: null,
+          name: excelRestaurant[1][1],
+          description: excelRestaurant[2][1],
+          paymentTypes:paymentTypes,
+          phone: excelRestaurant[5][1],
+          isOpen: true
+        })
+        //update id field
+        const restaurantRef = await locationsRef.collection('restaurants').doc(restaurant.id);
+        await restaurantRef.set({ id: restaurant.id }, { merge: true });
+
+        //add products
+        for(let i = 12; i<excelRestaurant.length; i++) {
+          const product = await restaurantRef.collection("products").add({
+            category: excelRestaurant[i][0],
+            name: excelRestaurant[i][1],
+            description: excelRestaurant[i][2],
+            price: excelRestaurant[i][3],
+            estimated_time: excelRestaurant[i][4],
+            isAvailable: (excelRestaurant[i][5].toLowerCase() == "sí" || excelRestaurant[i][5].toLowerCase() == "si")? true : false
+          })
+          await restaurantRef.collection('products').doc(product.id).set({ id: product.id }, { merge: true });
+        }
+      }
     }
   }
 
   useEffect(() => {
-    if(isIconValid){
+    if (isIconValid) {
       setIconImg(URL.createObjectURL(icon));
       setIconPath(icon.path);
     } else {
@@ -200,7 +260,7 @@ const App = () => {
       let image = new Image();
 
       image.src = e.target.result;
-              
+
       image.onload = function () {
         let height = this.height;
         let width = this.width;
@@ -226,10 +286,10 @@ const App = () => {
           <h2>
             Datos de la aplicación
           </h2>
-          <Input 
+          <Input
             label={appName.label}
             type={appName.type}
-            handleValue={(value) => setAppName({...appName, value})}
+            handleValue={(value) => setAppName({ ...appName, value })}
             required={appName.required}
             errorText={appName.errorText}
             submitted={submitted}
@@ -251,17 +311,17 @@ const App = () => {
           <Input
             label={appColor.label}
             type={appColor.type}
-            handleValue={(value) => setAppColor({...appColor, value})}
+            handleValue={(value) => setAppColor({ ...appColor, value })}
           />
         </section>
         <section>
           <h2>
             Datos de la plaza
           </h2>
-          <Input 
+          <Input
             label={storeName.label}
             type={storeName.type}
-            handleValue={(value) => setStoreName({...storeName, value})}
+            handleValue={(value) => setStoreName({ ...storeName, value })}
             required={storeName.required}
             errorText={storeName.errorText}
             submitted={submitted}
@@ -275,7 +335,7 @@ const App = () => {
           <Input
             label={projectName.label}
             type={projectName.type}
-            handleValue={(value) => setProjectName({...projectName, value})}
+            handleValue={(value) => setProjectName({ ...projectName, value })}
             required={projectName.required}
             errorText={projectName.errorText}
             submitted={submitted}
@@ -301,10 +361,10 @@ const App = () => {
           <h2>
             Datos de configuración de firebase
           </h2>
-          <Input 
+          <Input
             label={apiKey.label}
             type={apiKey.type}
-            handleValue={(value) => setApiKey({...apiKey, value})}
+            handleValue={(value) => setApiKey({ ...apiKey, value })}
             required={apiKey.required}
             errorText={apiKey.errorText}
             submitted={submitted}
@@ -313,7 +373,7 @@ const App = () => {
           <Input
             label={authDomain.label}
             type={authDomain.type}
-            handleValue={(value) => setAuthDomain({...authDomain, value})}
+            handleValue={(value) => setAuthDomain({ ...authDomain, value })}
             required={authDomain.required}
             errorText={authDomain.errorText}
             submitted={submitted}
@@ -322,7 +382,7 @@ const App = () => {
           <Input
             label={projectId.label}
             type={projectId.type}
-            handleValue={(value) => setProjectId({...projectId, value})}
+            handleValue={(value) => setProjectId({ ...projectId, value })}
             required={projectId.required}
             errorText={projectId.errorText}
             submitted={submitted}
@@ -331,7 +391,7 @@ const App = () => {
           <Input
             label={storageBucket.label}
             type={storageBucket.type}
-            handleValue={(value) => setStorageBucket({...storageBucket, value})}
+            handleValue={(value) => setStorageBucket({ ...storageBucket, value })}
             required={storageBucket.required}
             errorText={storageBucket.errorText}
             submitted={submitted}
@@ -340,7 +400,7 @@ const App = () => {
           <Input
             label={messagingSenderId.label}
             type={messagingSenderId.type}
-            handleValue={(value) => setMessagingSenderId({...messagingSenderId, value})}
+            handleValue={(value) => setMessagingSenderId({ ...messagingSenderId, value })}
             required={messagingSenderId.required}
             errorText={messagingSenderId.errorText}
             submitted={submitted}
@@ -350,7 +410,7 @@ const App = () => {
           <Input
             label={appId.label}
             type={appId.type}
-            handleValue={(value) => setAppId({...appId, value})}
+            handleValue={(value) => setAppId({ ...appId, value })}
             required={appId.required}
             errorText={appId.errorText}
             submitted={submitted}

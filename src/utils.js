@@ -1,5 +1,8 @@
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 let readXlsxFile = window.require('read-excel-file/node/');
-exports.readExcel = async (excelFilePath) => {
+export const readExcel = async (excelFilePath) => {
     //let excelPath = 'C:\\Users\\berna\\Documents\\Prácticas ITC\\excel test\\formato_pwa.xlsm';
     const sheets = [];
     try {
@@ -18,6 +21,17 @@ exports.readExcel = async (excelFilePath) => {
     }
 }
 
-exports.connectFirebase = async (config) => {
-    console.log('connecting to fb')
+export const connectFirebase = async (config) => {
+    console.log('connecting to fb',config)
+    const app = firebase.initializeApp({
+        apiKey: config.apiKey,
+        authDomain: config.authDomain,
+        projectId: config.projectId,
+        storageBucket: config.storageBucket,
+        messagingSenderId: config.messagingSenderId,
+        appId: config.appId
+    })
+    const db = app.firestore()
+    return db;
 }
+
