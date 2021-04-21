@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import 'firebase/auth';
+import 'firebase/storage';
 import 'firebase/firestore';
 let readXlsxFile = window.require('read-excel-file/node/');
 export const readExcel = async (excelFilePath) => {
@@ -22,7 +22,6 @@ export const readExcel = async (excelFilePath) => {
 }
 
 export const connectFirebase = async (config) => {
-    console.log('connecting to fb',config)
     const app = firebase.initializeApp({
         apiKey: config.apiKey,
         authDomain: config.authDomain,
@@ -31,7 +30,8 @@ export const connectFirebase = async (config) => {
         messagingSenderId: config.messagingSenderId,
         appId: config.appId
     })
-    const db = app.firestore()
-    return db;
+    const db = app.firestore();
+    const storage = app.storage();
+    return [db, storage];
 }
 
