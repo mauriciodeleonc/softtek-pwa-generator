@@ -1,11 +1,12 @@
-import React, { useCallback, useState, useRef } from 'react'
+import React, { useCallback, useState, useRef, useEffect } from 'react'
 import {useDropzone} from 'react-dropzone'
 import { Trash } from '../icons/icons';
 
 const Dropzone = () => {
-    const [acceptedFiles, setAcceptedFiles] = useState([]);
+    const [files, setFiles] = useState([]);
 
-    const onDrop = useCallback(accepted => {
+    /*const onDrop = useCallback(accepted => {
+        setAcceptedFiles([]);
         let aFiles = [...acceptedFiles];
         console.log(aFiles);
         for(let i = 0; i < accepted.length; i++) {
@@ -14,33 +15,38 @@ const Dropzone = () => {
         console.log(aFiles);
         setAcceptedFiles(aFiles);
         //setRejectedFiles(rejected);
-    }, []);
+    }, []);*/
 
-    const {
+    let {
         getRootProps, 
         getInputProps, 
         isDragActive,
         //fileRejections,
-        //acceptedFiles,
+        acceptedFiles,
     } = useDropzone({
-        onDrop,
+        /*onDrop,*/
         accept: '.csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         noKeyboard: true,
+        maxFiles: 1
     });
 
-    const acceptedFileItems = acceptedFiles.map((file, i) => {
-        const fileName = (file.path).replace(/\\/g, '/').split('/').pop();
-        return (
-          <li key={file.path}>
-            <span><p className='bold text-smallest'>{fileName}</p> <Trash onClick={() => {
-              let accepted = [...acceptedFiles];
-              accepted.splice(i, 1);
-              setAcceptedFiles(accepted);
-            }}/></span>
-            <progress id={file.path} value={file.size/2} max={file.size}>hola</progress>
-          </li>
-        );
-      });
+    useEffect(() => {
+      setFiles(acceptedFiles);
+    }, [acceptedFiles]);
+
+    const acceptedFileItems = files.map(file => {
+      const fileName = (file.path).replace(/\\/g, '/').split('/').pop();
+
+      return (
+        <li key={file.path}>
+          <span><p className='bold text-smallest'>{fileName}</p> <Trash onClick={() => setFiles([])}/></span>
+          {/*<progress id={file.path} value={progress} max={100}>hola</progress>*/}
+          <div class="progress">
+            <div class="progress-value"></div>
+          </div>
+        </li>
+      );
+    });
     
       /*const fileRejectionItems = fileRejections.map(({ file, errors }) => (
         <li key={file.path}>
@@ -55,11 +61,11 @@ const Dropzone = () => {
 
     return (
         <>
-            <div {...getRootProps({className: `dropzone ${isDragActive && (false ? 'rejecting-file' : 'dragging-file')}`})}>
+            <div {...getRootProps({className: `dropzone ${isDragActive && 'dragging-file'}`})}>
             <input {...getInputProps()} />
             {
                 isDragActive ?
-                <p>¡Listo, ahora sueltalos!</p> :
+                <p>¡Listo, ahora suelta tus archivos xls, xlsx, csv, aquí!</p> :
                 <>
                         <p>
                             Arrastra y suelta tus archivos aquí
@@ -71,10 +77,7 @@ const Dropzone = () => {
                 </>
             }
             </div>
-            <h4>Accepted files</h4>
             <ul>{acceptedFileItems}</ul>
-            <h4>Rejected files</h4>
-            <ul>{/*fileRejectionItems*/}</ul>
         </>
     )
 }
