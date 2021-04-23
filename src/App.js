@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import Button from './global/Button';
 import Input from './global/Input';
 import Dropzone from './global/Dropzone';
-const { readExcel, connectFirebase, uploadExcelData } = require('./utils');
+const { connectFirebase, uploadExcelData, generatePWA } = require('./utils');
 const App = () => {
 
   const [iconPath, setIconPath] = useState(null);
@@ -179,9 +179,22 @@ const App = () => {
       projectId.valid &&
       storageBucket.valid &&
       messagingSenderId.valid &&
-      appId.valid
+      appId.valid ||true
       ) {
-        await uploadExcelData(storeName.value);       
+        try {
+          await uploadExcelData(storeName.value);  
+          const proyectLocation = 'C:\\Users\\berna\\Documents\\Prácticas ITC'
+          //generate .css
+          
+          //generate app manifest
+  
+          //generate .env
+
+          //copy folder
+          generatePWA(proyectLocation, 'newPWA')
+        } catch(err) {
+          console.log(err)
+        }
       }
   }
 

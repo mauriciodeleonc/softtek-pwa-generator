@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a2fc65b2.chunk.css",
+    "main.js": "/static/js/main.314a70a4.chunk.js",
+    "main.js.map": "/static/js/main.314a70a4.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.3be63b73.js",
+    "runtime-main.js.map": "/static/js/runtime-main.3be63b73.js.map",
+    "static/js/2.bc742ebf.chunk.js": "/static/js/2.bc742ebf.chunk.js",
+    "static/js/2.bc742ebf.chunk.js.map": "/static/js/2.bc742ebf.chunk.js.map",
+    "static/js/3.79880d30.chunk.js": "/static/js/3.79880d30.chunk.js",
+    "static/js/3.79880d30.chunk.js.map": "/static/js/3.79880d30.chunk.js.map",
+    "index.html": "/index.html",
+    "service-worker.js": "/service-worker.js",
+    "service-worker.js.map": "/service-worker.js.map",
+    "static/css/main.a2fc65b2.chunk.css.map": "/static/css/main.a2fc65b2.chunk.css.map",
+    "static/js/2.bc742ebf.chunk.js.LICENSE.txt": "/static/js/2.bc742ebf.chunk.js.LICENSE.txt",
+    "static/media/google-logo.fecc06c5.png": "/static/media/google-logo.fecc06c5.png",
+    "static/media/search.715c7df9.svg": "/static/media/search.715c7df9.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3be63b73.js",
+    "static/js/2.bc742ebf.chunk.js",
+    "static/css/main.a2fc65b2.chunk.css",
+    "static/js/main.314a70a4.chunk.js"
+  ]
+}

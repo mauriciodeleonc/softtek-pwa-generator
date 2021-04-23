@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/storage';
 import 'firebase/firestore';
-const fs = window.require('fs');
+const fs = window.require('fs-extra');
 let readXlsxFile = window.require('read-excel-file/node/');
 export const readExcel = async (excelFilePath) => {
     //let excelPath = 'C:\\Users\\berna\\Documents\\Prácticas ITC\\excel test\\formato_pwa.xlsm';
@@ -181,3 +181,17 @@ export const uploadExcelData = async (storeName) => {
     }
 }
 
+export const generatePWA = async (dest, folderName) => {
+    //copy pwa folder to destination destination path
+    try {
+        dest = dest+'/'+folderName
+        await fs.ensureDirSync(dest);    
+        const src = './src/pwa';
+        await fs.copy(src, dest, function (err) {
+            if (err) return console.error(err)
+            console.log('success!')
+          });
+    } catch(err) {
+        console.log(err)
+    }
+}
