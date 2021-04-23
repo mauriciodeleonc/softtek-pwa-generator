@@ -181,7 +181,7 @@ const App = () => {
       messagingSenderId.valid &&
       appId.valid
       ) {
-        await uploadExcelData(storeName.value);
+        await uploadExcelData(storeName.value);       
       }
   }
 

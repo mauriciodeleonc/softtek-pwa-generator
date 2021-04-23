@@ -24,7 +24,7 @@ const Dropzone = () => {
         //acceptedFiles,
     } = useDropzone({
         onDrop,
-        accept: '.csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        accept: '.csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, .xlsm',
         noKeyboard: true,
     });
 

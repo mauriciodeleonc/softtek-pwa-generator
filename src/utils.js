@@ -38,6 +38,7 @@ export const connectFirebase = async (config) => {
 
 export const uploadExcelData = async (storeName) => {
     try {
+        //TODO change hardcoded
         const excelData = await readExcel('C:\\Users\\berna\\Documents\\Prácticas ITC\\excel test\\formato_pwa.xlsm');
         console.log('excel data:', excelData);
         //check if excel data is complete. return if not
