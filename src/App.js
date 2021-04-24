@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import Button from './global/Button';
 import Input from './global/Input';
 import Dropzone from './global/Dropzone';
-const { connectFirebase, uploadExcelData, generatePWA } = require('./utils');
+const { connectFirebase, uploadExcelData, generatePWA, generateEnv, generateCss, generateManifest } = require('./utils');
 const App = () => {
 
   const [iconPath, setIconPath] = useState(null);
@@ -179,23 +179,36 @@ const App = () => {
       projectId.valid &&
       storageBucket.valid &&
       messagingSenderId.valid &&
-      appId.valid ||true
-      ) {
-        try {
-          await uploadExcelData(storeName.value);  
-          const proyectLocation = 'C:\\Users\\berna\\Documents\\Prácticas ITC'
-          //generate .css
-          
-          //generate app manifest
-  
-          //generate .env
-
-          //copy folder
-          generatePWA(proyectLocation, 'newPWA')
-        } catch(err) {
-          console.log(err)
+      appId.valid
+    ) {
+      try {
+        const fbConfig = {
+          apiKey: apiKey.value,
+          authDomain: authDomain.value,
+          projectId: projectId.value,
+          storageBucket: storageBucket.value,
+          messagingSenderId: messagingSenderId.value,
+          appId: appId.value
         }
+        //TODO test paths on mac (slashes are different)
+        //TODO replace projectLocation with 'ubicacion donde se guaradara elproyecto'
+        const projectLocation = 'C:\\Users\\berna\\Documents\\Prácticas ITC'
+        const projectPath = `${projectLocation}\\${projectName.value}`
+        //upload excel data to firebase
+        await uploadExcelData(storeName.value, fbConfig);
+        //copy pwa folder
+        await generatePWA(projectLocation, projectName.value, iconImg, iconPath);
+        //generate .env
+        await generateEnv(projectPath, fbConfig)
+        //generate .css
+        await generateCss(projectPath, appColor.value)
+        //generate app manifest
+        await generateManifest(projectPath, appName.value)
+
+      } catch (err) {
+        console.log(err)
       }
+    } //TODO add loading spinner
   }
 
   useEffect(() => {

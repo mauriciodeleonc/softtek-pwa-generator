@@ -1,24 +1,3 @@
-:root { 
-  --main-text: #001833;
-  --gray-text: #606F81;
-  --main-light: #FAFCFF;
-  --background-color: #FCFCFC;
-  --error: #FF3333;
-  --light-error: #FFE5E6;
-  --main: #FF6961;
-  --main-shadow: rgba(255, 105, 97, 0.4);
-  --secondary-button: #FFE7E5;
-  --main-green: #00E52F;
-  --light-green: #E5FFEB;
-  --main-blue: #15F4EE;
-  --light-blue: #E7FEFD;
-  --main-yellow: #FCE839;
-  --light-yellow: #FFFCE6;
-  --main-orange: #FF8300;
-  --light-orange: #FFF3E5;
-  --border-gray: rgba(0, 24, 51, 0.1);
-}
-
 html {
   font-size: 100%;
   margin: 0;

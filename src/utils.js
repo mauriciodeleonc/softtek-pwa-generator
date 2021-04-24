@@ -36,9 +36,9 @@ export const connectFirebase = async (config) => {
     return [db, storage];
 }
 
-export const uploadExcelData = async (storeName) => {
+export const uploadExcelData = async (storeName, fbConfig) => {
     try {
-        //TODO change hardcoded
+        //TODO change hardcoded excel path
         const excelData = await readExcel('C:\\Users\\berna\\Documents\\Prácticas ITC\\excel test\\formato_pwa.xlsm');
         console.log('excel data:', excelData);
         //check if excel data is complete. return if not
@@ -55,22 +55,22 @@ export const uploadExcelData = async (storeName) => {
             }
         }
         //connect to firebase
-        // const [db, storage] = await connectFirebase({
-        //   apiKey: apiKey.value,
-        //   authDomain: authDomain.value,
-        //   projectId: projectId.value,
-        //   storageBucket: storageBucket.value,
-        //   messagingSenderId: messagingSenderId.value,
-        //   appId: appId.value
-        // })
         const [db, storage] = await connectFirebase({
-            apiKey: "AIzaSyDBeKFfQLOXcTwzsoMDrepvk3BHvqUNFvY",
-            authDomain: "test-bb03e.firebaseapp.com",
-            projectId: "test-bb03e",
-            storageBucket: "test-bb03e.appspot.com",
-            messagingSenderId: "1035533266251",
-            appId: "1:1035533266251:web:e2e8fcea80feec49228cce"
+          apiKey: fbConfig.apiKey,
+          authDomain: fbConfig.authDomain,
+          projectId: fbConfig.projectId,
+          storageBucket: fbConfig.storageBucket,
+          messagingSenderId: fbConfig.messagingSenderId,
+          appId: fbConfig.appId,
         })
+        // const [db, storage] = await connectFirebase({
+        //     apiKey: "AIzaSyDBeKFfQLOXcTwzsoMDrepvk3BHvqUNFvY",
+        //     authDomain: "test-bb03e.firebaseapp.com",
+        //     projectId: "test-bb03e",
+        //     storageBucket: "test-bb03e.appspot.com",
+        //     messagingSenderId: "1035533266251",
+        //     appId: "1:1035533266251:web:e2e8fcea80feec49228cce"
+        // })
         const batch = db.batch();
         batch.set(db.collection('faq').doc(), {
             questions: '¿Puedo actualizar el "Cajón de estacionamiento"?',
@@ -181,17 +181,97 @@ export const uploadExcelData = async (storeName) => {
     }
 }
 
-export const generatePWA = async (dest, folderName) => {
+export const generatePWA = async (dest, folderName,iconImg, iconPath) => {
     //copy pwa folder to destination destination path
     try {
-        dest = dest+'/'+folderName
-        await fs.ensureDirSync(dest);    
+        dest = dest + '/' + folderName
+        await fs.ensureDirSync(dest);
         const src = './src/pwa';
-        await fs.copy(src, dest, function (err) {
-            if (err) return console.error(err)
-            console.log('success!')
-          });
-    } catch(err) {
+        await fs.copy(src, dest)
+        //read icon and save in destination folder
+        const icon = await fs.readFileSync(iconPath)
+        await fs.writeFileSync(`${dest}\\public\\logo.png`, icon)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const generateEnv = async (projectPath, fbConfig) => {
+    //create .env file with firebase config in created pwa project
+    try {
+        const data = `REACT_APP_FIREBASE_API_KEY=${fbConfig.apiKey}
+REACT_APP_FIREBASE_AUTH_DOMAIN=${fbConfig.authDomain}
+REACT_APP_FIREBASE_PROJECT_ID=${fbConfig.projectId}
+REACT_APP_FIREBASE_STORAGE_BUCKET=${fbConfig.storageBucket}
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${fbConfig.messagingSenderId}
+REACT_APP_FIREBASE_APP_ID=${fbConfig.appId}`
+        await fs.writeFileSync(`${projectPath}\\.env`, data)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const generateManifest = async (projectPath, appName) => {
+    //create manifest file in created pwa project
+    try {
+        const data = `{
+            "short_name": "${appName}",
+            "name": "${appName}",
+            "icons": [
+              {
+                "src": "favicon.ico",
+                "sizes": "64x64 32x32 24x24 16x16",
+                "type": "image/x-icon"
+              },
+              {
+                "src": "logo.png",
+                "type": "image/png",
+                "sizes": "512x512"
+              }
+            ],
+            "gcm_sender_id": "103953800507",
+            "start_url": "/",
+            "scope": "/",
+            "display": "standalone",
+            "theme_color": "#000000",
+            "background_color": "#ffffff"
+          }`
+        await fs.writeFileSync(`${projectPath}\\public\\manifest.json`, data)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+export const generateCss = async (projectPath, appColor) => {
+    //create css file in created pwa project
+    try {
+        console.log(appColor)
+        let css = await fs.readFileSync('./src/pwa/src/index.css', 'utf8')
+        css += `
+:root { 
+    --main-text: #001833;
+    --gray-text: #606F81;
+    --main-light: #FAFCFF;
+    --background-color: #FCFCFC;
+    --error: #FF3333;
+    --light-error: #FFE5E6;
+    --main: ${appColor ? appColor : '#FF6961'};
+    --main-shadow: rgba(255, 105, 97, 0.4);
+    --secondary-button: #FFE7E5;
+    --main-green: #00E52F;
+    --light-green: #E5FFEB;
+    --main-blue: #15F4EE;
+    --light-blue: #E7FEFD;
+    --main-yellow: #FCE839;
+    --light-yellow: #FFFCE6;
+    --main-orange: #FF8300;
+    --light-orange: #FFF3E5;
+    --border-gray: rgba(0, 24, 51, 0.1);
+  }
+        `;
+        await fs.writeFileSync(`${projectPath}\\src\\index.css`, css)
+    } catch (err) {
         console.log(err)
     }
 }
