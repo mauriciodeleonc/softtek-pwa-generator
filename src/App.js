@@ -4,13 +4,12 @@ import Input from './global/Input';
 import Dropzone from './global/Dropzone';
 const { connectFirebase, uploadExcelData, generatePWA, generateEnv, generateCss, generateManifest } = require('./utils');
 const App = () => {
-
+  const [loading, setLoading] = useState(false);
   const [iconPath, setIconPath] = useState(null);
   const [iconImg, setIconImg] = useState(null);
   const [isIconValid, setIsIconValid] = useState(false);
   const [icon, setIcon] = useState(null);
   const [projectLocation, setProjectLocation] = useState(null);
-  const configFiles = useRef(null);
   const [submitted, setSubmitted] = useState(false);
   const [appName, setAppName] = useState({
     label: 'Nombre de la aplicación',
@@ -23,7 +22,7 @@ const App = () => {
   const [appColor, setAppColor] = useState({
     label: 'Color principal (opcional)',
     type: 'color',
-    value: '',
+    value: '#FF6961',
     required: false,
     errorText: '',
     valid: false,
@@ -78,7 +77,7 @@ const App = () => {
   });
   const [messagingSenderId, setMessagingSenderId] = useState({
     label: 'messagingSenderId',
-    type: 'text',
+    type: 'number',
     value: '',
     required: true,
     errorText: 'Por favor escribe tu messagingSenderId para poder continuar',
@@ -155,10 +154,10 @@ const App = () => {
     }
 
     if (messagingSenderId.value.trim() !== '' && messagingSenderId.required) {
-      if (/^[0-9]*$/.test(projectId.value)) {
+      if (/^[0-9]*$/.test(messagingSenderId.value)) {
         setMessagingSenderId({ ...messagingSenderId, valid: true });
       } else {
-        setMessagingSenderId({ ...messagingSenderId, valid: false, errorText: 'El messagingSendeId solo puede estar conformado por números' });
+        setMessagingSenderId({ ...messagingSenderId, valid: false, errorText: 'El messagingSenderId solo puede estar conformado por números' });
       }
     } else {
       setMessagingSenderId({ ...messagingSenderId, valid: false, errorText: 'Por favor escribe tu messagingSenderId para poder continuar' });
@@ -169,9 +168,10 @@ const App = () => {
     } else {
       setAppId({ ...appId, valid: false });
     }
+
     if ( //if all fields are valid, read excel and upload to firebase
       appName.valid &&
-      appColor.valid &&
+      //appColor.valid &&
       storeName.valid &&
       projectName.valid &&
       apiKey.valid &&
@@ -182,6 +182,7 @@ const App = () => {
       appId.valid
     ) {
       try {
+        setLoading(true);
         const fbConfig = {
           apiKey: apiKey.value,
           authDomain: authDomain.value,
@@ -192,8 +193,8 @@ const App = () => {
         }
         //TODO test paths on mac (slashes are different)
         //TODO replace projectLocation with 'ubicacion donde se guaradara elproyecto'
-        const projectLocation = 'C:\\Users\\berna\\Documents\\Prácticas ITC'
-        const projectPath = `${projectLocation}\\${projectName.value}`
+        const projectLocation = '/Users/mauriciodeleon/Desktop/'
+        const projectPath = `${projectLocation}/${projectName.value}`
         //upload excel data to firebase
         await uploadExcelData(storeName.value, fbConfig);
         //copy pwa folder
@@ -204,11 +205,11 @@ const App = () => {
         await generateCss(projectPath, appColor.value)
         //generate app manifest
         await generateManifest(projectPath, appName.value)
-
+        setLoading(false);
       } catch (err) {
         console.log(err)
       }
-    } //TODO add loading spinner
+    }
   }
 
   useEffect(() => {
@@ -248,151 +249,159 @@ const App = () => {
   }
 
   return (
-    <div className='main-flex'>
-      <div className='navbar'>
-        <h1>Generar PWA</h1>
+    <>
+      {loading &&
+        <div className='vertical-center black-bg'>
+          <div className='loading'></div>
+          <p className='text-small'>Estamos cargando tu información a firebsae, espera...</p>
+        </div>
+      }
+      <div className='main-flex'>
+        <div className='navbar'>
+          <h1>Generar PWA</h1>
+        </div>
+        <form className='content-flex' onSubmit={handleSubmit}>
+          <section>
+            <h2>
+              Datos de la aplicación
+            </h2>
+            <Input
+              label={appName.label}
+              type={appName.type}
+              handleValue={(value) => setAppName({ ...appName, value })}
+              required={appName.required}
+              errorText={appName.errorText}
+              submitted={submitted}
+              valid={appName.valid}
+            />
+            <Input
+              label={'Ícono de la aplicación'}
+              value={iconPath ? iconPath : ''}
+              type='file'
+              name='icon'
+              size='md'
+              buttonLabel='Escoger archivo'
+              accept='image/*'
+              handleFiles={handleIconUpload}
+            />
+            {iconImg &&
+              <img src={iconImg} className='icon' />
+            }
+            <Input
+              label={appColor.label}
+              type={appColor.type}
+              handleValue={(value) => setAppColor({ ...appColor, value })}
+            />
+          </section>
+          <section>
+            <h2>
+              Datos de la plaza
+            </h2>
+            <Input
+              label={storeName.label}
+              type={storeName.type}
+              handleValue={(value) => setStoreName({ ...storeName, value })}
+              required={storeName.required}
+              errorText={storeName.errorText}
+              submitted={submitted}
+              valid={storeName.valid}
+            />
+          </section>
+          <section>
+            <h2>
+              Datos del proyecto
+            </h2>
+            <Input
+              label={projectName.label}
+              type={projectName.type}
+              handleValue={(value) => setProjectName({ ...projectName, value })}
+              required={projectName.required}
+              errorText={projectName.errorText}
+              submitted={submitted}
+              valid={projectName.valid}
+            />
+            <Input
+              label='Ubicación donde se guardará el proyecto'
+              type='file'
+              value={projectLocation ? projectLocation : ''}
+              name='projectLocation'
+              size='lg'
+              buttonLabel='Escoger ruta'
+              directory
+              handleFiles={(e) => {
+                console.log(e.target.files[0].path);
+                setProjectLocation(e.target.files[0].path);
+              }}
+            />
+            <h3>Información de restaurantes</h3>
+            <Dropzone />
+          </section>
+          <section>
+            <h2>
+              Datos de configuración de firebase
+            </h2>
+            <Input
+              label={apiKey.label}
+              type={apiKey.type}
+              handleValue={(value) => setApiKey({ ...apiKey, value })}
+              required={apiKey.required}
+              errorText={apiKey.errorText}
+              submitted={submitted}
+              valid={apiKey.valid}
+            />
+            <Input
+              label={authDomain.label}
+              type={authDomain.type}
+              handleValue={(value) => setAuthDomain({ ...authDomain, value })}
+              required={authDomain.required}
+              errorText={authDomain.errorText}
+              submitted={submitted}
+              valid={authDomain.valid}
+            />
+            <Input
+              label={projectId.label}
+              type={projectId.type}
+              handleValue={(value) => setProjectId({ ...projectId, value })}
+              required={projectId.required}
+              errorText={projectId.errorText}
+              submitted={submitted}
+              valid={projectId.valid}
+            />
+            <Input
+              label={storageBucket.label}
+              type={storageBucket.type}
+              handleValue={(value) => setStorageBucket({ ...storageBucket, value })}
+              required={storageBucket.required}
+              errorText={storageBucket.errorText}
+              submitted={submitted}
+              valid={storageBucket.valid}
+            />
+            <Input
+              label={messagingSenderId.label}
+              type={messagingSenderId.type}
+              handleValue={(value) => setMessagingSenderId({ ...messagingSenderId, value })}
+              required={messagingSenderId.required}
+              errorText={messagingSenderId.errorText}
+              submitted={submitted}
+              valid={messagingSenderId.valid}
+              size='md'
+            />
+            <Input
+              label={appId.label}
+              type={appId.type}
+              handleValue={(value) => setAppId({ ...appId, value })}
+              required={appId.required}
+              errorText={appId.errorText}
+              submitted={submitted}
+              valid={appId.valid}
+            />
+          </section>
+          <section>
+            <Button variant='primary' label='Generar PWA' type='submit' />
+          </section>
+        </form>
       </div>
-      <form className='content-flex' onSubmit={handleSubmit}>
-        <section>
-          <h2>
-            Datos de la aplicación
-          </h2>
-          <Input
-            label={appName.label}
-            type={appName.type}
-            handleValue={(value) => setAppName({ ...appName, value })}
-            required={appName.required}
-            errorText={appName.errorText}
-            submitted={submitted}
-            valid={appName.valid}
-          />
-          <Input
-            label={'Ícono de la aplicación'}
-            value={iconPath ? iconPath : ''}
-            type='file'
-            name='icon'
-            size='md'
-            buttonLabel='Escoger archivo'
-            accept='image/*'
-            handleFiles={handleIconUpload}
-          />
-          {iconImg &&
-            <img src={iconImg} className='icon' />
-          }
-          <Input
-            label={appColor.label}
-            type={appColor.type}
-            handleValue={(value) => setAppColor({ ...appColor, value })}
-          />
-        </section>
-        <section>
-          <h2>
-            Datos de la plaza
-          </h2>
-          <Input
-            label={storeName.label}
-            type={storeName.type}
-            handleValue={(value) => setStoreName({ ...storeName, value })}
-            required={storeName.required}
-            errorText={storeName.errorText}
-            submitted={submitted}
-            valid={storeName.valid}
-          />
-        </section>
-        <section>
-          <h2>
-            Datos del proyecto
-          </h2>
-          <Input
-            label={projectName.label}
-            type={projectName.type}
-            handleValue={(value) => setProjectName({ ...projectName, value })}
-            required={projectName.required}
-            errorText={projectName.errorText}
-            submitted={submitted}
-            valid={projectName.valid}
-          />
-          <Input
-            label='Ubicación donde se guardará el proyecto'
-            type='file'
-            value={projectLocation ? projectLocation : ''}
-            name='projectLocation'
-            size='lg'
-            buttonLabel='Escoger ruta'
-            directory
-            handleFiles={(e) => {
-              console.log(e.target.files[0].path);
-              setProjectLocation(e.target.files[0].path);
-            }}
-          />
-          <h3>Información de restaurantes</h3>
-          <Dropzone />
-        </section>
-        <section>
-          <h2>
-            Datos de configuración de firebase
-          </h2>
-          <Input
-            label={apiKey.label}
-            type={apiKey.type}
-            handleValue={(value) => setApiKey({ ...apiKey, value })}
-            required={apiKey.required}
-            errorText={apiKey.errorText}
-            submitted={submitted}
-            valid={apiKey.valid}
-          />
-          <Input
-            label={authDomain.label}
-            type={authDomain.type}
-            handleValue={(value) => setAuthDomain({ ...authDomain, value })}
-            required={authDomain.required}
-            errorText={authDomain.errorText}
-            submitted={submitted}
-            valid={authDomain.valid}
-          />
-          <Input
-            label={projectId.label}
-            type={projectId.type}
-            handleValue={(value) => setProjectId({ ...projectId, value })}
-            required={projectId.required}
-            errorText={projectId.errorText}
-            submitted={submitted}
-            valid={projectId.valid}
-          />
-          <Input
-            label={storageBucket.label}
-            type={storageBucket.type}
-            handleValue={(value) => setStorageBucket({ ...storageBucket, value })}
-            required={storageBucket.required}
-            errorText={storageBucket.errorText}
-            submitted={submitted}
-            valid={storageBucket.valid}
-          />
-          <Input
-            label={messagingSenderId.label}
-            type={messagingSenderId.type}
-            handleValue={(value) => setMessagingSenderId({ ...messagingSenderId, value })}
-            required={messagingSenderId.required}
-            errorText={messagingSenderId.errorText}
-            submitted={submitted}
-            valid={messagingSenderId.valid}
-            size='md'
-          />
-          <Input
-            label={appId.label}
-            type={appId.type}
-            handleValue={(value) => setAppId({ ...appId, value })}
-            required={appId.required}
-            errorText={appId.errorText}
-            submitted={submitted}
-            valid={appId.valid}
-          />
-        </section>
-        <section>
-          <Button variant='primary' label='Generar PWA' type='submit' />
-        </section>
-      </form>
-    </div>
+    </>
   );
 }
 

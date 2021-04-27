@@ -39,7 +39,7 @@ export const connectFirebase = async (config) => {
 export const uploadExcelData = async (storeName, fbConfig) => {
     try {
         //TODO change hardcoded excel path
-        const excelData = await readExcel('C:\\Users\\berna\\Documents\\Prácticas ITC\\excel test\\formato_pwa.xlsm');
+        const excelData = await readExcel('/Users/mauriciodeleon/Desktop/formato_pwa.xlsm');
         console.log('excel data:', excelData);
         //check if excel data is complete. return if not
         for (const rest of excelData) {
@@ -190,7 +190,7 @@ export const generatePWA = async (dest, folderName,iconImg, iconPath) => {
         await fs.copy(src, dest)
         //read icon and save in destination folder
         const icon = await fs.readFileSync(iconPath)
-        await fs.writeFileSync(`${dest}\\public\\logo.png`, icon)
+        await fs.writeFileSync(`${dest}/public/logo.png`, icon)
     } catch (err) {
         console.log(err)
     }
@@ -205,7 +205,7 @@ REACT_APP_FIREBASE_PROJECT_ID=${fbConfig.projectId}
 REACT_APP_FIREBASE_STORAGE_BUCKET=${fbConfig.storageBucket}
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${fbConfig.messagingSenderId}
 REACT_APP_FIREBASE_APP_ID=${fbConfig.appId}`
-        await fs.writeFileSync(`${projectPath}\\.env`, data)
+        await fs.writeFileSync(`${projectPath}/.env`, data)
     } catch (err) {
         console.log(err)
     }
@@ -236,7 +236,7 @@ export const generateManifest = async (projectPath, appName) => {
             "theme_color": "#000000",
             "background_color": "#ffffff"
           }`
-        await fs.writeFileSync(`${projectPath}\\public\\manifest.json`, data)
+        await fs.writeFileSync(`${projectPath}/public/manifest.json`, data)
     } catch (err) {
         console.log(err)
     }
@@ -270,7 +270,7 @@ export const generateCss = async (projectPath, appColor) => {
     --border-gray: rgba(0, 24, 51, 0.1);
   }
         `;
-        await fs.writeFileSync(`${projectPath}\\src\\index.css`, css)
+        await fs.writeFileSync(`${projectPath}/src/index.css`, css)
     } catch (err) {
         console.log(err)
     }

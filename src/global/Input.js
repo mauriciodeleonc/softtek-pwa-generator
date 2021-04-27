@@ -29,7 +29,7 @@ class Input extends Component {
             case 'file':
                 return(
                     <>
-                        <label for={this.props.name} className='file-label'>
+                        <label htmlFor={this.props.name} className='file-label'>
                             <div className={`input-wrapper ${this.props.className && this.props.className} ${this.props.size ? this.props.size : 'block'}`}>
                                 <p>{this.props.value}</p>
                                 <div className={`input-placeholder non-bold ${this.props.value.length > 0 && 'focused'}`}>
