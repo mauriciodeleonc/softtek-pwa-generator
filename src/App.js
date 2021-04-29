@@ -13,6 +13,7 @@ const App = () => {
   const [isIconValid, setIsIconValid] = useState(false);
   const [icon, setIcon] = useState(null);
   const [projectLocation, setProjectLocation] = useState(null);
+  const [excelFile, setExcelFile] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [appName, setAppName] = useState({
     label: 'Nombre de la aplicación',
@@ -96,14 +97,18 @@ const App = () => {
   });
 
   const handleProjectLocation = async () => {
-    let path = null;
-    var p = await dialog.showOpenDialog({
-      properties: ['openDirectory']
-    });
-    if (p.filePaths) {
-      path = Path.normalize(p.filePaths[0])
+    try {
+      let path = null;
+      var p = await dialog.showOpenDialog({
+        properties: ['openDirectory']
+      });
+      if (p.filePaths) {
+        path = Path.normalize(p.filePaths[0])
+      }
+      setProjectLocation(path);
+    } catch (e) {
+      console.log(e);
     }
-    setProjectLocation(path);
   }
 
   const handleSubmit = async (e) => {
@@ -208,7 +213,7 @@ const App = () => {
         }
         const projectPath = `${projectLocation}/${projectName.value}`
         //upload excel data to firebase
-        const excelPath = '/Users/mauriciodeleon/Desktop/formato_pwa.xlsm' //TODO: get excel path from dropzone component
+        const excelPath = excelFile.path;//'/Users/mauriciodeleon/Desktop/formato_pwa.xlsm' //TODO: get excel path from dropzone component
         await uploadExcelData(storeName.value, fbConfig, excelPath);
         //copy pwa folder
         await generatePWA(projectLocation, projectName.value, iconImg, iconPath);
@@ -335,7 +340,7 @@ const App = () => {
             />
             <Input
               label='Ubicación donde se guardará el proyecto'
-              // type='file'
+              type='looksLikeFile'
               value={projectLocation ? projectLocation : ''}
               name='projectLocation'
               size='lg'
@@ -348,7 +353,7 @@ const App = () => {
               handleValue={handleProjectLocation}
             />
             <h3>Información de restaurantes</h3>
-            <Dropzone />
+            <Dropzone handleAcceptedFile={(e) => setExcelFile(e)}/>
           </section>
           <section>
             <h2>

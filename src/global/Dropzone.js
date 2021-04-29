@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {useDropzone} from 'react-dropzone'
 import { Trash } from '../icons/icons';
 
-const Dropzone = () => {
+const Dropzone = (props) => {
     const [files, setFiles] = useState([]);
 
     let {
@@ -18,6 +18,7 @@ const Dropzone = () => {
 
     useEffect(() => {
       setFiles(acceptedFiles);
+      props.handleAcceptedFile(acceptedFiles[0]);
     }, [acceptedFiles]);
 
     const acceptedFileItems = files.map(file => {

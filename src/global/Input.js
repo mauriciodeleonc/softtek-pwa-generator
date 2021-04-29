@@ -67,9 +67,35 @@ class Input extends Component {
                                 multiple=''
                             />
                         }
-                        {/*<div className={`non-bold ${this.state.value.length > 0 && 'focused'}`}>
-                            {this.props.label}
-                        </div>*/}
+                    </>
+                );
+            case 'looksLikeFile': 
+                return(
+                    <>
+                        <label htmlFor={this.props.name} className='file-label' onClick={this.props.handleValue}>
+                            <div className={`input-wrapper ${this.props.className && this.props.className} ${this.props.size ? this.props.size : 'block'}`}>
+                                <p>{this.props.value}</p>
+                                <div className={`input-placeholder non-bold ${this.props.value.length > 0 && 'focused'}`}>
+                                    {this.props.label}
+                                </div>
+                            </div>
+                            <div className='button secondary'>
+                                <p className='text-smaller'>{this.props.buttonLabel}</p>
+                            </div>
+                        </label>
+                        {/*this.props.directory &&
+                            <input
+                                id={this.props.name}
+                                className='file-input'
+                                value={this.state.value}
+                                //onChange={this.props.handleValue}
+                                ref={this.props.innerRef}
+                                accept={this.props.accept}
+                                directory=''
+                                webkitdirectory=''
+                                multiple=''
+                            />
+                        */}
                     </>
                 );
             default:
