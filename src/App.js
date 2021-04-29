@@ -2,6 +2,9 @@ import { useState, useRef, useEffect } from 'react';
 import Button from './global/Button';
 import Input from './global/Input';
 import Dropzone from './global/Dropzone';
+const Path = window.require('path');
+const { remote } = require('electron');
+const dialog = remote.require('electron').dialog;
 const { connectFirebase, uploadExcelData, generatePWA, generateEnv, generateCss, generateManifest } = require('./utils');
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -92,8 +95,20 @@ const App = () => {
     valid: false,
   });
 
+  const handleProjectLocation = async () => {
+    let path = null;
+    var p = await dialog.showOpenDialog({
+      properties: ['openDirectory']
+    });
+    if (p.filePaths) {
+      path = Path.normalize(p.filePaths[0])
+    }
+    setProjectLocation(path);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(projectLocation)
     setSubmitted(true);
     if (appName.value.trim() !== '' && appName.required) {
       setAppName({ ...appName, valid: true });
@@ -191,12 +206,10 @@ const App = () => {
           messagingSenderId: messagingSenderId.value,
           appId: appId.value
         }
-        //TODO test paths on mac (slashes are different)
-        //TODO replace projectLocation with 'ubicacion donde se guaradara elproyecto'
-        const projectLocation = '/Users/mauriciodeleon/Desktop/'
         const projectPath = `${projectLocation}/${projectName.value}`
         //upload excel data to firebase
-        await uploadExcelData(storeName.value, fbConfig);
+        const excelPath = '/Users/mauriciodeleon/Desktop/formato_pwa.xlsm' //TODO: get excel path from dropzone component
+        await uploadExcelData(storeName.value, fbConfig, excelPath);
         //copy pwa folder
         await generatePWA(projectLocation, projectName.value, iconImg, iconPath);
         //generate .env
@@ -322,16 +335,17 @@ const App = () => {
             />
             <Input
               label='Ubicación donde se guardará el proyecto'
-              type='file'
+              // type='file'
               value={projectLocation ? projectLocation : ''}
               name='projectLocation'
               size='lg'
               buttonLabel='Escoger ruta'
               directory
-              handleFiles={(e) => {
-                console.log(e.target.files[0].path);
-                setProjectLocation(e.target.files[0].path);
-              }}
+              // handleFiles={(e) => {
+              //   console.log(e.target.files[0].path);
+              //   setProjectLocation(e.target.files[0].path);
+              // }}
+              handleValue={handleProjectLocation}
             />
             <h3>Información de restaurantes</h3>
             <Dropzone />

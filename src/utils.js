@@ -36,10 +36,9 @@ export const connectFirebase = async (config) => {
     return [db, storage];
 }
 
-export const uploadExcelData = async (storeName, fbConfig) => {
+export const uploadExcelData = async (storeName, fbConfig, excelPath) => {
     try {
-        //TODO change hardcoded excel path
-        const excelData = await readExcel('/Users/mauriciodeleon/Desktop/formato_pwa.xlsm');
+        const excelData = await readExcel(excelPath);
         console.log('excel data:', excelData);
         //check if excel data is complete. return if not
         for (const rest of excelData) {
