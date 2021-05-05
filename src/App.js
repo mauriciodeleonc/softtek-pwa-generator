@@ -113,7 +113,6 @@ const App = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(projectLocation)
     setSubmitted(true);
     if (appName.value.trim() !== '' && appName.required) {
       setAppName({ ...appName, valid: true });
@@ -213,8 +212,10 @@ const App = () => {
         }
         const projectPath = `${projectLocation}/${projectName.value}`
         //upload excel data to firebase
-        const excelPath = excelFile.path;//'/Users/mauriciodeleon/Desktop/formato_pwa.xlsm' //TODO: get excel path from dropzone component
-        await uploadExcelData(storeName.value, fbConfig, excelPath);
+        if(excelFile) {
+          const excelPath = excelFile.path;//'/Users/mauriciodeleon/Desktop/formato_pwa.xlsm' //TODO: get excel path from dropzone component
+          await uploadExcelData(storeName.value, fbConfig, excelPath);
+        }
         //copy pwa folder
         await generatePWA(projectLocation, projectName.value, iconImg, iconPath);
         //generate .env
@@ -271,7 +272,7 @@ const App = () => {
       {loading &&
         <div className='vertical-center black-bg'>
           <div className='loading'></div>
-          <p className='text-small'>Estamos cargando tu información a firebsae, espera...</p>
+          <p className='text-small'>Estamos cargando tu información a firebase, espera...</p>
         </div>
       }
       <div className='main-flex'>

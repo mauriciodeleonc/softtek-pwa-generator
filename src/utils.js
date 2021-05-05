@@ -55,12 +55,12 @@ export const uploadExcelData = async (storeName, fbConfig, excelPath) => {
         }
         //connect to firebase
         const [db, storage] = await connectFirebase({
-          apiKey: fbConfig.apiKey,
-          authDomain: fbConfig.authDomain,
-          projectId: fbConfig.projectId,
-          storageBucket: fbConfig.storageBucket,
-          messagingSenderId: fbConfig.messagingSenderId,
-          appId: fbConfig.appId,
+            apiKey: fbConfig.apiKey,
+            authDomain: fbConfig.authDomain,
+            projectId: fbConfig.projectId,
+            storageBucket: fbConfig.storageBucket,
+            messagingSenderId: fbConfig.messagingSenderId,
+            appId: fbConfig.appId,
         })
         // const [db, storage] = await connectFirebase({
         //     apiKey: "AIzaSyDBeKFfQLOXcTwzsoMDrepvk3BHvqUNFvY",
@@ -180,7 +180,7 @@ export const uploadExcelData = async (storeName, fbConfig, excelPath) => {
     }
 }
 
-export const generatePWA = async (dest, folderName,iconImg, iconPath) => {
+export const generatePWA = async (dest, folderName, iconImg, iconPath) => {
     //copy pwa folder to destination destination path
     try {
         dest = dest + '/' + folderName
@@ -245,7 +245,10 @@ export const generateManifest = async (projectPath, appName) => {
 export const generateCss = async (projectPath, appColor) => {
     //create css file in created pwa project
     try {
-        console.log(appColor)
+        const rgb = appColor.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i
+            , (m, r, g, b) => '#' + r + r + g + g + b + b)
+            .substring(1).match(/.{2}/g)
+            .map(x => parseInt(x, 16))
         let css = await fs.readFileSync('./src/pwa/src/index.css', 'utf8')
         css += `
 :root { 
@@ -256,7 +259,7 @@ export const generateCss = async (projectPath, appColor) => {
     --error: #FF3333;
     --light-error: #FFE5E6;
     --main: ${appColor ? appColor : '#FF6961'};
-    --main-shadow: rgba(255, 105, 97, 0.4);
+    --main-shadow: rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.4);
     --secondary-button: #FFE7E5;
     --main-green: #00E52F;
     --light-green: #E5FFEB;
