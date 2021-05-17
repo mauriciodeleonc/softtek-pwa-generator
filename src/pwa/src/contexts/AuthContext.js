@@ -12,10 +12,19 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState();
     const [loading, setLoading] = useState(true)
 
-    async function signup(email, password) {
+    async function getNotificationsToken() {
+        try {
+            return await messaging.getToken(); //
+
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async function signup(email, password, token) {
         try {
             const user = await auth.createUserWithEmailAndPassword(email, password);
-            const token = await messaging.getToken(); //
+            //const token = await messaging.getToken(); //
             const userData = {
                 id: user.user.uid,
                 isUser: true,
@@ -46,11 +55,11 @@ export function AuthProvider({ children }) {
         return auth.signInWithEmailAndPassword(email, password)
     }
 
-    async function loginWithGoogle() {
+    async function loginWithGoogle(token) {
         try {
             const googleProvider = new firebase.auth.GoogleAuthProvider();
             const user = await auth.signInWithPopup(googleProvider);
-            const token = await messaging.getToken(); //
+            //const token = await messaging.getToken(); //
             const userData = {
                 id: user.user.uid,
                 isUser: true,
@@ -91,6 +100,7 @@ export function AuthProvider({ children }) {
     }, [])
 
     const value = {
+        getNotificationsToken,
         currentUser,
         signup,
         login,

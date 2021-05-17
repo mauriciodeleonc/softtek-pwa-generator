@@ -213,13 +213,13 @@ const App = () => {
         const projectPath = `${projectLocation}/${projectName.value}`
         //upload excel data to firebase
         if(excelFile) {
-          const excelPath = excelFile.path;//'/Users/mauriciodeleon/Desktop/formato_pwa.xlsm' //TODO: get excel path from dropzone component
+          const excelPath = excelFile.path;
           await uploadExcelData(storeName.value, fbConfig, excelPath);
         }
         //copy pwa folder
         await generatePWA(projectLocation, projectName.value, iconImg, iconPath);
         //generate .env
-        await generateEnv(projectPath, fbConfig)
+        await generateEnv(projectPath, fbConfig, appName.value)
         //generate .css
         await generateCss(projectPath, appColor.value)
         //generate app manifest

@@ -59,18 +59,20 @@
     "electron": "^12.0.2",
     "electron-devtools-installer": "^3.1.1",
     "electron-rebuild": "^2.3.5",
-    "wait-on": "^5.1.0"
+    "wait-on": "^5.3.0"
   },
   "config": {
     "forge": {
       "packagerConfig": {
-        "name:": "Softtek PWA generator"
+        "name:": "Softtek PWA generator",
+        "asar": true
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "softtek_desk_app"
+            "name": "softtek_desk_app",
+            "setupIcon": "./public/favicon.ico"
           }
         },
         {
@@ -89,5 +91,14 @@
         }
       ]
     }
-  }
+  },
+  "author": {
+    "name": "Bernardo Cárdenas"
+  },
+  "contributors": [
+    {
+      "name": "Mauricio De León"
+    }
+  ],
+  "description": "A tool for creating PWAs"
 }

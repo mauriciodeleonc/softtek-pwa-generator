@@ -188,7 +188,7 @@ export function CartProvider({ children }) {
                 restaurantId: restaurant.restaurantId,
                 statusId: 1,
                 storeName: restaurant.restaurantName,
-                total: restaurant.total,
+                total: getRestaurantTotal(restaurant), //ensure total is correct
                 userId: cart.userId,
                 waitingTime: restaurant.waitingTime
             });

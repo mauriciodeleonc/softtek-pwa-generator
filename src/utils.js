@@ -195,7 +195,7 @@ export const generatePWA = async (dest, folderName, iconImg, iconPath) => {
     }
 }
 
-export const generateEnv = async (projectPath, fbConfig) => {
+export const generateEnv = async (projectPath, fbConfig, appName) => {
     //create .env file with firebase config in created pwa project
     try {
         const data = `REACT_APP_FIREBASE_API_KEY=${fbConfig.apiKey}
@@ -203,7 +203,8 @@ REACT_APP_FIREBASE_AUTH_DOMAIN=${fbConfig.authDomain}
 REACT_APP_FIREBASE_PROJECT_ID=${fbConfig.projectId}
 REACT_APP_FIREBASE_STORAGE_BUCKET=${fbConfig.storageBucket}
 REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${fbConfig.messagingSenderId}
-REACT_APP_FIREBASE_APP_ID=${fbConfig.appId}`
+REACT_APP_FIREBASE_APP_ID=${fbConfig.appId}
+REACT_APP_APP_NAME=${appName}`
         await fs.writeFileSync(`${projectPath}/.env`, data)
     } catch (err) {
         console.log(err)
@@ -260,7 +261,7 @@ export const generateCss = async (projectPath, appColor) => {
     --light-error: #FFE5E6;
     --main: ${appColor ? appColor : '#FF6961'};
     --main-shadow: rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.4);
-    --secondary-button: #FFE7E5;
+    --secondary-button: rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.4);
     --main-green: #00E52F;
     --light-green: #E5FFEB;
     --main-blue: #15F4EE;
