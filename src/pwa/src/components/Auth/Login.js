@@ -38,7 +38,6 @@ export default function Login() {
             return setError('Favor de permitir notificaciones')
         }
         try {
-            console.log(token)
             await loginWithGoogle(emailRef.current.value, passwordRef.current.value, token);
             history.push('/')
         } catch (err) {

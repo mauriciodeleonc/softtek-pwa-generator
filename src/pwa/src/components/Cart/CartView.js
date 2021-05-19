@@ -153,10 +153,11 @@ const CartView = (props) => {
     }
 
     const clickCreateOrder = async () => {
-        if(payment === 'Tarjeta')
-            setCashAmount(cart.total.toFixed(2));
-
-        await createOrder(location, parkingSpot, phone, name, payment, cashAmount);
+        if(payment === 'Tarjeta') {
+            await createOrder(location, parkingSpot, phone, name, payment, cart.total);
+        } else {
+            await createOrder(location, parkingSpot, phone, name, payment, cashAmount);
+        }
         history.push('/ordenes');
     }
 
