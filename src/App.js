@@ -271,7 +271,7 @@ const App = () => {
       {loading &&
         <div className='vertical-center black-bg'>
           <div className='loading'></div>
-          <p className='text-small'>Estamos cargando tu información a firebase, espera...</p>
+          <p className='text-small'>Estamos generando su PWA, espere porfavor...</p>
         </div>
       }
       <div className='main-flex'>

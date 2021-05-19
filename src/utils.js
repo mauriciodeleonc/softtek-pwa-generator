@@ -187,6 +187,8 @@ export const generatePWA = async (dest, folderName, iconImg, iconPath) => {
         await fs.ensureDirSync(dest);
         const src = './src/pwa';
         await fs.copy(src, dest)
+        //copy firebase functions index
+        await fs.copy('./src/functions', dest.split('/')[0]);
         //read icon and save in destination folder
         const icon = await fs.readFileSync(iconPath)
         await fs.writeFileSync(`${dest}/public/logo.png`, icon)
