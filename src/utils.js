@@ -38,7 +38,11 @@ export const connectFirebase = async (config) => {
 
 export const uploadExcelData = async (storeName, fbConfig, excelPath) => {
     try {
-        const excelData = await readExcel(excelPath);
+        let excelData = await readExcel(excelPath);
+        //remove unused restaurant sheets
+        excelData = excelData.filter((el) => {
+            return el.length > 0;
+          });
         console.log('excel data:', excelData);
         //check if excel data is complete. return if not
         for (const rest of excelData) {
@@ -62,14 +66,7 @@ export const uploadExcelData = async (storeName, fbConfig, excelPath) => {
             messagingSenderId: fbConfig.messagingSenderId,
             appId: fbConfig.appId,
         })
-        // const [db, storage] = await connectFirebase({
-        //     apiKey: "AIzaSyDBeKFfQLOXcTwzsoMDrepvk3BHvqUNFvY",
-        //     authDomain: "test-bb03e.firebaseapp.com",
-        //     projectId: "test-bb03e",
-        //     storageBucket: "test-bb03e.appspot.com",
-        //     messagingSenderId: "1035533266251",
-        //     appId: "1:1035533266251:web:e2e8fcea80feec49228cce"
-        // })
+
         const batch = db.batch();
         batch.set(db.collection('faq').doc(), {
             questions: '¿Puedo actualizar el "Cajón de estacionamiento"?',
